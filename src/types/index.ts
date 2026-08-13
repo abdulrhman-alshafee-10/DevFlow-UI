@@ -1,9 +1,17 @@
 /**
- * Shared application types.
+ * Shared application types — barrel re-export.
  *
- * Feature-specific types (Task, Project, User, etc.) will land in
- * their own files under `src/types/` as later phases introduce them.
+ * Primitive/UI types live here directly.
+ * Domain model types (User, Project, Task, …) live in their own files
+ * and are re-exported below so consumers can always import from `@/types`.
  */
+
+// ── Domain models ──────────────────────────────────────────────────────────
+export type { ApiErrorResponse, PaginatedResponse } from './api';
+export type { User, UserRole } from './user';
+export type { Organization } from './organization';
+export type { Project, ProjectStatus } from './project';
+export type { Task } from './task';
 
 /** A record with well-known ISO-8601 timestamp fields. */
 export interface Timestamps {
