@@ -52,3 +52,6 @@ next-env.d.ts
 .vscode/*
 !.vscode/settings.json
 !.vscode/extensions.json
+
+/.kiro
+.kiro

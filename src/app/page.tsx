@@ -5,6 +5,11 @@ import { ColorPalette } from '@/components/showcase/color-palette';
 import { TypographyShowcase } from '@/components/showcase/typography-showcase';
 import { ButtonShowcase } from '@/components/showcase/button-showcase';
 import { InputShowcase } from '@/components/showcase/input-showcase';
+import { BadgeShowcase } from '@/components/showcase/badge-showcase';
+import { AvatarShowcase } from '@/components/showcase/avatar-showcase';
+import { ModalShowcase } from '@/components/showcase/modal-showcase';
+import { DropdownShowcase } from '@/components/showcase/dropdown-showcase';
+import { ToastShowcase } from '@/components/showcase/toast-showcase';
 import { MiscShowcase } from '@/components/showcase/misc-showcase';
 import { siteConfig } from '@/config/site';
 
@@ -48,6 +53,46 @@ export default function HomePage() {
           description="Labels, helper text, error announcements, and required-field semantics are wired up automatically."
         >
           <InputShowcase />
+        </ShowcaseSection>
+
+        <ShowcaseSection
+          eyebrow="Components"
+          title="Badges tuned to DevFlow priorities and statuses"
+          description="Priority and status props resolve to design-locked variants so every task badge stays consistent across the app."
+        >
+          <BadgeShowcase />
+        </ShowcaseSection>
+
+        <ShowcaseSection
+          eyebrow="Components"
+          title="Avatars with deterministic fallbacks"
+          description="Missing images fall back to uppercase initials on a per-name background hue, so the same user always looks the same."
+        >
+          <AvatarShowcase />
+        </ShowcaseSection>
+
+        <ShowcaseSection
+          eyebrow="Components"
+          title="Accessible modals via Radix"
+          description="Focus is trapped, Esc dismisses, and the trigger regains focus on close — all inherited from Radix Dialog."
+        >
+          <ModalShowcase />
+        </ShowcaseSection>
+
+        <ShowcaseSection
+          eyebrow="Components"
+          title="Keyboard-friendly dropdown menus"
+          description="Arrow-key navigation, roving tabindex, and destructive-item styling built on Radix Dropdown Menu."
+        >
+          <DropdownShowcase />
+        </ShowcaseSection>
+
+        <ShowcaseSection
+          eyebrow="Components"
+          title="Toasts backed by sonner"
+          description="Success, error, info, and neutral variants dispatched from anywhere via a typed toast() singleton."
+        >
+          <ToastShowcase />
         </ShowcaseSection>
 
         <ShowcaseSection

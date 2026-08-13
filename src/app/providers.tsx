@@ -3,6 +3,8 @@
 import type { ReactNode } from 'react';
 import { ThemeProvider } from 'next-themes';
 
+import { Toaster } from '@/components/ui/toast';
+
 interface ProvidersProps {
   children: ReactNode;
 }
@@ -12,6 +14,10 @@ interface ProvidersProps {
  *
  * `next-themes` swaps the `class` on <html> which lets Tailwind's
  * `dark:` variant kick in without any client-side re-render or FOUC.
+ *
+ * `<Toaster />` is mounted exactly once here so the sonner surface is
+ * available anywhere in the tree via the `toast(...)` singleton
+ * (see `@/components/ui/toast`).
  */
 export function Providers({ children }: ProvidersProps) {
   return (
@@ -22,6 +28,7 @@ export function Providers({ children }: ProvidersProps) {
       disableTransitionOnChange
     >
       {children}
+      <Toaster />
     </ThemeProvider>
   );
 }

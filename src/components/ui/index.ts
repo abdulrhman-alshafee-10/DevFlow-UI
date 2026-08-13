@@ -24,3 +24,39 @@ export type { LabelProps } from './label';
 
 export { Spinner } from './spinner';
 export type { SpinnerProps } from './spinner';
+
+export { Avatar } from './avatar';
+export type { AvatarProps, AvatarSize } from './avatar';
+
+export {
+  Modal,
+  ModalTrigger,
+  ModalClose,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalTitle,
+  ModalDescription,
+} from './modal';
+export type { ModalContentProps } from './modal';
+
+export {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from './dropdown-menu';
+export type {
+  DropdownMenuContentProps,
+  DropdownMenuItemProps,
+} from './dropdown-menu';
+
+export { Toaster, toast } from './toast';
+export type {
+  ToasterProps,
+  ToastOptions,
+  ToastAPI,
+  ToastVariant,
+} from './toast';
