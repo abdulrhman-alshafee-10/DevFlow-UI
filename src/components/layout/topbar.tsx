@@ -2,7 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { Menu, ChevronRight, Bell } from 'lucide-react';
+import { Menu, ChevronRight, Bell, LogOut } from 'lucide-react';
 
 import { cn } from '@/lib/utils/cn';
 import { ThemeToggle } from '@/components/layout/theme-toggle';
@@ -16,23 +16,15 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { buttonVariants } from '@/components/ui/button';
 import { dashboardNav } from '@/config/nav';
+import { useAuth } from '@/hooks/use-auth';
 
 interface TopbarProps {
   onMenuClick: () => void;
 }
 
-/**
- * Builds a breadcrumb trail from the current pathname.
- *
- * Examples:
- *   /dashboard           → [{ label: 'Dashboard', href: '/dashboard' }]
- *   /projects/my-project → [{ label: 'Projects', href: '/projects' },
- *                           { label: 'My Project', href: '/projects/my-project' }]
- */
 function useBreadcrumbs() {
   const pathname = usePathname();
   const segments = pathname.split('/').filter(Boolean);
-
   return segments.map((segment, index) => {
     const href = '/' + segments.slice(0, index + 1).join('/');
     const label = segment
@@ -42,17 +34,13 @@ function useBreadcrumbs() {
   });
 }
 
-/**
- * Dashboard top navigation bar.
- *
- * - Hamburger button (mobile only) to open `MobileNav`
- * - Breadcrumb trail derived from `usePathname()`
- * - Notification bell placeholder
- * - Theme toggle
- * - User profile dropdown
- */
 export function Topbar({ onMenuClick }: TopbarProps) {
   const breadcrumbs = useBreadcrumbs();
+  const { user, logout, logoutAll, isLoggingOut } = useAuth();
+
+  const displayName = user?.displayName ?? 'Demo User';
+  const email = user?.email ?? '';
+  const avatarSrc = user?.avatarUrl ?? undefined;
 
   return (
     <header className="sticky top-0 z-30 flex h-16 shrink-0 items-center gap-4 border-b border-border bg-background/80 px-4 backdrop-blur-md md:px-6">
@@ -105,7 +93,6 @@ export function Topbar({ onMenuClick }: TopbarProps) {
 
       {/* Actions */}
       <div className="flex items-center gap-1">
-        {/* Notification bell — placeholder for Phase 8+ */}
         <button
           type="button"
           aria-label="Notifications"
@@ -124,14 +111,18 @@ export function Topbar({ onMenuClick }: TopbarProps) {
               aria-label="Open user menu"
               className="rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
-              <Avatar name="Demo User" size="sm" />
+              <Avatar src={avatarSrc} name={displayName} size="sm" />
             </button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-52">
-            {/* User info header — not a focusable item */}
+          <DropdownMenuContent align="end" className="w-56">
+            {/* User info — not a focusable item */}
             <div className="px-2 py-1.5">
-              <p className="text-sm font-medium">Demo User</p>
-              <p className="text-xs text-muted-foreground">demo@devflow.app</p>
+              <p className="text-sm font-medium">{displayName}</p>
+              {email && (
+                <p className="truncate text-xs text-muted-foreground">
+                  {email}
+                </p>
+              )}
             </div>
             <DropdownMenuSeparator />
             {dashboardNav.map(({ label, href, icon: Icon }) => (
@@ -143,8 +134,21 @@ export function Topbar({ onMenuClick }: TopbarProps) {
               </DropdownMenuItem>
             ))}
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-destructive focus:text-destructive">
-              Sign out
+            <DropdownMenuItem
+              onSelect={() => logout()}
+              disabled={isLoggingOut}
+              destructive
+            >
+              <LogOut className="size-4" aria-hidden="true" />
+              {isLoggingOut ? 'Signing out…' : 'Sign out'}
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onSelect={() => logoutAll()}
+              disabled={isLoggingOut}
+              destructive
+            >
+              <LogOut className="size-4" aria-hidden="true" />
+              Sign out all devices
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
