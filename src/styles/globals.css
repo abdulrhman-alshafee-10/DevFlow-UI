@@ -1,0 +1,178 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * DevFlow — Design Token Definitions
+ * ---------------------------------------------------------------
+ * All colors are stored as raw HSL triplets (H S% L%) — never as
+ * `hsl(...)` — so Tailwind can compose them with `<alpha-value>`
+ * for arbitrary opacity: e.g. `bg-primary/50`.
+ * ---------------------------------------------------------------
+ */
+
+@layer base {
+  :root {
+    /* Surfaces */
+    --background: 0 0% 100%;
+    --foreground: 224 71% 4%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 224 71% 4%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 71% 4%;
+
+    /* Brand primary — Indigo 500/600 range */
+    --primary: 239 84% 67%;
+    --primary-foreground: 210 40% 98%;
+
+    /* Neutrals */
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 224 71% 4%;
+
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 9% 46%;
+
+    --accent: 220 14% 96%;
+    --accent-foreground: 224 71% 4%;
+
+    /* Feedback */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+
+    --success: 142 71% 45%;
+    --success-foreground: 210 40% 98%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 224 71% 4%;
+
+    --info: 199 89% 48%;
+    --info-foreground: 210 40% 98%;
+
+    /* Chrome */
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 239 84% 67%;
+
+    /* Radius */
+    --radius: 0.625rem;
+  }
+
+  .dark {
+    --background: 224 71% 4%;
+    --foreground: 210 40% 98%;
+
+    --card: 222 47% 8%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222 47% 8%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 239 84% 67%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 217 33% 17%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;
+
+    --accent: 217 33% 17%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 63% 45%;
+    --destructive-foreground: 210 40% 98%;
+
+    --success: 142 71% 45%;
+    --success-foreground: 210 40% 98%;
+
+    --warning: 38 92% 55%;
+    --warning-foreground: 224 71% 4%;
+
+    --info: 199 89% 55%;
+    --info-foreground: 210 40% 98%;
+
+    --border: 217 33% 20%;
+    --input: 217 33% 20%;
+    --ring: 224 76% 66%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background font-sans text-foreground antialiased;
+    font-feature-settings:
+      'rlig' 1,
+      'calt' 1,
+      'ss01' 1;
+  }
+
+  /* Balanced text wrapping for headings */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    text-wrap: balance;
+    @apply font-display tracking-tight;
+  }
+
+  /* Better focus visibility across the app */
+  :focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+
+  /* Selection styling */
+  ::selection {
+    @apply bg-primary/25 text-foreground;
+  }
+
+  /* Custom scrollbar (WebKit) */
+  ::-webkit-scrollbar {
+    @apply h-2 w-2;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-border;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/40;
+  }
+}
+
+@layer utilities {
+  /* Ambient gradient used on hero sections */
+  .bg-grid {
+    background-image:
+      linear-gradient(to right, hsl(var(--border) / 0.6) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(var(--border) / 0.6) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  .bg-radial-fade {
+    background: radial-gradient(
+      ellipse 60% 50% at 50% 0%,
+      hsl(var(--primary) / 0.15),
+      transparent 70%
+    );
+  }
+
+  /* Prevents flash-of-wrong-theme (paired with next-themes) */
+  .no-transition * {
+    transition: none !important;
+  }
+}
