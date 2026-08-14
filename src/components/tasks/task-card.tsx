@@ -3,6 +3,7 @@
 import { CalendarDays, GripVertical } from 'lucide-react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import Link from 'next/link';
 
 import { cn } from '@/lib/utils/cn';
 import { Badge } from '@/components/ui/badge';
@@ -11,10 +12,8 @@ import type { Task } from '@/types';
 
 interface TaskCardProps {
   task: Task;
-  /** Assignee display name — resolved by the parent from the members list. */
   assigneeName?: string;
   assigneeAvatarUrl?: string | null;
-  /** Disable drag handles (e.g. inside a read-only view). */
   disabled?: boolean;
 }
 
@@ -33,8 +32,9 @@ function formatDueDate(iso: string): string {
 /**
  * Draggable task card used inside `TaskColumn`.
  *
- * Uses `useSortable` from @dnd-kit/sortable so it participates in both
- * within-column reordering and cross-column drops.
+ * The card title is a link to the task detail route — Next.js intercepts
+ * it with the `@modal/(.)tasks/[taskId]` parallel route so the board
+ * stays visible behind the slide-over panel.
  */
 export function TaskCard({
   task,
@@ -86,9 +86,14 @@ export function TaskCard({
 
       {/* Card body */}
       <div className="min-w-0 flex-1 space-y-2">
-        <p className="line-clamp-2 text-sm font-medium leading-snug">
+        {/* Title — links to task detail (intercepted by @modal slot) */}
+        <Link
+          href={`/projects/${task.projectId}/tasks/${task.id}`}
+          className="line-clamp-2 text-sm font-medium leading-snug transition-colors hover:text-primary"
+          tabIndex={isDragging ? -1 : undefined}
+        >
           {task.title}
-        </p>
+        </Link>
 
         <div className="flex flex-wrap items-center gap-1.5">
           <Badge priority={task.priority}>{task.priority}</Badge>

@@ -9,6 +9,8 @@ import { Spinner } from '@/components/ui/spinner';
 
 interface LayoutProps {
   children: ReactNode;
+  /** Parallel route slot — renders the task detail modal when intercepted. */
+  modal: ReactNode;
   params: Promise<{ projectId: string }>;
 }
 
@@ -18,8 +20,15 @@ interface LayoutProps {
  * Fetches the project, renders its name + status as a sub-header,
  * then mounts the project nav tabs (Board / List / Settings) above
  * whatever page is nested beneath.
+ *
+ * The `modal` parallel route slot renders the task detail intercept
+ * when a user clicks a task card — the board stays in the background.
  */
-export default function ProjectLayout({ children, params }: LayoutProps) {
+export default function ProjectLayout({
+  children,
+  modal,
+  params,
+}: LayoutProps) {
   const { projectId } = use(params);
   const { project, isLoading } = useProject(projectId);
 
@@ -50,6 +59,9 @@ export default function ProjectLayout({ children, params }: LayoutProps) {
 
       {/* Page content */}
       <div className="p-4 md:p-6">{children}</div>
+
+      {/* Modal slot — rendered on top of content when a task is intercepted */}
+      {modal}
     </div>
   );
 }
