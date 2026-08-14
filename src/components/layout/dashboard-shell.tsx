@@ -6,6 +6,7 @@ import type { ReactNode } from 'react';
 import { Sidebar } from '@/components/layout/sidebar';
 import { Topbar } from '@/components/layout/topbar';
 import { MobileNav } from '@/components/layout/mobile-nav';
+import { WebSocketProvider } from '@/components/layout/websocket-provider';
 
 interface DashboardShellProps {
   children: ReactNode;
@@ -13,14 +14,17 @@ interface DashboardShellProps {
 
 /**
  * Client component that owns mobile nav open/close state.
- * The dashboard `layout.tsx` is a Server Component — this shell
- * handles all the client-side interactivity.
+ * Also mounts the WebSocketProvider so realtime sync is active across
+ * the entire dashboard session.
  */
 export function DashboardShell({ children }: DashboardShellProps) {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   return (
     <div className="flex h-dvh overflow-hidden bg-background">
+      {/* Realtime WebSocket sync — renders nothing, manages socket lifecycle */}
+      <WebSocketProvider />
+
       {/* Desktop sidebar — hidden on mobile */}
       <div className="hidden md:flex md:shrink-0">
         <Sidebar />

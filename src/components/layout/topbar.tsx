@@ -17,6 +17,7 @@ import {
 import { buttonVariants } from '@/components/ui/button';
 import { dashboardNav } from '@/config/nav';
 import { useAuth } from '@/hooks/use-auth';
+import { ConnectionStatusDot } from '@/components/layout/connection-status-dot';
 
 interface TopbarProps {
   onMenuClick: () => void;
@@ -92,7 +93,10 @@ export function Topbar({ onMenuClick }: TopbarProps) {
       </nav>
 
       {/* Actions */}
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-2">
+        {/* Realtime connection status dot */}
+        <ConnectionStatusDot />
+
         <button
           type="button"
           aria-label="Notifications"
