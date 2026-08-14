@@ -8,3 +8,4 @@ export {
   statusToBadgeVariant,
 } from './badge-mappings';
 export type { ResolveBadgeVariantProps } from './badge-mappings';
+export { hasMinRole, checkPermission } from './roles';

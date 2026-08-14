@@ -82,3 +82,12 @@ export async function resetPassword(
 export async function verifyEmail(payload: VerifyEmailPayload): Promise<void> {
   await apiClient.post('/api/v1/auth/verify-email', payload);
 }
+
+/**
+ * Attempt to refresh the access token using the HTTP-only refresh cookie.
+ * Called automatically by the Axios 401 interceptor — not called directly
+ * by application code.
+ */
+export async function refresh(): Promise<void> {
+  await apiClient.post('/api/v1/auth/refresh');
+}
