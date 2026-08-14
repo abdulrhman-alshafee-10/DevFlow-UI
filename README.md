@@ -1,11 +1,22 @@
 # DevFlow — Frontend
 
-The web client for the DevFlow project management platform. Built with
-Next.js 14 (App Router), TypeScript, and Tailwind CSS.
+The web client for the DevFlow project management platform. Built with Next.js 14 (App Router), TypeScript, and Tailwind CSS.
 
-> Currently on **Phase 1 — Foundation & Architecture**. The application
-> renders a Design System showcase demonstrating every color token,
-> font, and UI primitive established in this phase.
+---
+
+## Tech stack
+
+| Layer            | Technology                                        |
+| ---------------- | ------------------------------------------------- |
+| Framework        | Next.js 14 (App Router)                           |
+| Language         | TypeScript 5                                      |
+| Styling          | Tailwind CSS + CSS variables                      |
+| Components       | Radix UI primitives + custom design system        |
+| State            | Zustand (global) + TanStack Query (server state)  |
+| Forms            | React Hook Form + Zod                             |
+| Real-time        | WebSockets + SSE                                  |
+| Testing          | Vitest + React Testing Library + MSW + Playwright |
+| Containerization | Docker (multi-stage)                              |
 
 ---
 
@@ -14,13 +25,15 @@ Next.js 14 (App Router), TypeScript, and Tailwind CSS.
 - **Node.js** 20 LTS or newer
 - **npm** 10+ (bundled with Node 20+)
 
+---
+
 ## Getting started
 
 ```bash
 # 1. Install dependencies
 npm install
 
-# 2. Copy env template
+# 2. Copy env template and fill in values
 cp .env.example .env.local
 
 # 3. Start the dev server
@@ -29,6 +42,21 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
+---
+
+## Environment variables
+
+| Variable                   | Description                                                |
+| -------------------------- | ---------------------------------------------------------- |
+| `NEXT_PUBLIC_APP_URL`      | Public URL of this frontend (e.g. `http://localhost:3000`) |
+| `NEXT_PUBLIC_API_URL`      | FastAPI backend base URL (e.g. `http://localhost:8000`)    |
+| `NEXT_PUBLIC_WS_URL`       | WebSocket base URL (e.g. `ws://localhost:8000`)            |
+| `NEXT_PUBLIC_ENABLE_DEBUG` | Enable verbose client-side logging (`true` / `false`)      |
+
+`NEXT_PUBLIC_*` variables are baked into the client bundle at **build time**. Never put secrets behind this prefix.
+
+---
+
 ## Available scripts
 
 | Command                | Purpose                               |
@@ -36,47 +64,76 @@ Open [http://localhost:3000](http://localhost:3000).
 | `npm run dev`          | Start the Next.js dev server with HMR |
 | `npm run build`        | Production build                      |
 | `npm run start`        | Serve the production build            |
-| `npm run lint`         | Run ESLint on the whole project       |
+| `npm run lint`         | Run ESLint                            |
 | `npm run lint:fix`     | ESLint with auto-fix                  |
 | `npm run format`       | Format everything with Prettier       |
 | `npm run format:check` | Verify formatting without writing     |
-| `npm run type-check`   | Run TypeScript without emitting       |
+| `npm run type-check`   | TypeScript check without emitting     |
+| `npm test`             | Run unit + component tests (Vitest)   |
+| `npm run test:watch`   | Vitest in watch mode                  |
+| `npm run test:e2e`     | Run Playwright E2E tests              |
+| `npm run test:e2e:ui`  | Playwright interactive UI mode        |
+
+---
 
 ## Project structure
 
 ```
 DevFlow-front-end/
-├── docs/                # Learning + roadmap documentation
-├── public/              # Static assets served as-is
+├── public/                  # Static assets
 ├── src/
-│   ├── app/             # Next.js App Router
-│   │   ├── layout.tsx   # Root layout + fonts + providers
-│   │   ├── page.tsx     # Design system showcase (Phase 1 landing)
-│   │   ├── providers.tsx
-│   │   ├── loading.tsx  # Global loading state
-│   │   ├── error.tsx    # Global error boundary
+│   ├── app/                 # Next.js App Router
+│   │   ├── (auth)/          # Login, register, forgot password
+│   │   ├── (dashboard)/     # Protected app routes
+│   │   │   ├── dashboard/
+│   │   │   ├── projects/
+│   │   │   ├── organizations/
+│   │   │   └── settings/
+│   │   ├── layout.tsx       # Root layout + providers
+│   │   ├── providers.tsx    # QueryClient, theme, auth
+│   │   ├── loading.tsx
+│   │   ├── error.tsx
 │   │   └── not-found.tsx
 │   │
 │   ├── components/
-│   │   ├── ui/          # Design system primitives (Button, Input, ...)
-│   │   ├── layout/      # SiteHeader, ThemeToggle
-│   │   └── showcase/    # Sections used on the landing page
+│   │   ├── ui/              # Design system primitives
+│   │   ├── layout/          # Shell, topbar, sidebar, nav
+│   │   ├── auth/            # Login/register forms, guards
+│   │   ├── tasks/           # Board, cards, filters, modals
+│   │   ├── comments/        # Comment input + list
+│   │   ├── notifications/   # Notification panel
+│   │   ├── search/          # Command palette + results
+│   │   ├── files/           # Attachment upload + list
+│   │   ├── ai/              # AI chat, streaming, markdown
+│   │   └── settings/        # Profile + org settings forms
 │   │
-│   ├── config/          # Fonts, site metadata, env access
-│   ├── hooks/           # Reusable React hooks
+│   ├── hooks/               # Custom React hooks
 │   ├── lib/
-│   │   └── utils/       # cn() and misc helpers
+│   │   ├── api/             # Axios API modules (auth, tasks, …)
+│   │   ├── schemas/         # Zod validation schemas
+│   │   ├── utils/           # cn() and misc helpers
+│   │   └── ws/              # WebSocket client
+│   ├── stores/              # Zustand stores
 │   ├── styles/
-│   │   └── globals.css  # Tailwind base + CSS variable tokens
-│   └── types/           # Shared TypeScript types
+│   │   └── globals.css      # Tailwind base + CSS variable tokens
+│   ├── test/                # Test setup + MSW mocks
+│   └── types/               # Shared TypeScript types
 │
-├── tailwind.config.ts
-├── tsconfig.json
+├── tests/
+│   └── e2e/                 # Playwright E2E tests
+│
+├── Dockerfile               # Multi-stage production image
+├── docker-compose.yml       # Frontend + backend services
+├── playwright.config.ts
+├── vitest.config.ts
 ├── next.config.mjs
-└── package.json
+├── tailwind.config.ts
+└── tsconfig.json
 ```
 
-## Design system quick reference
+---
+
+## Design system
 
 Semantic color tokens (light + dark, HSL-based):
 
@@ -85,25 +142,52 @@ Semantic color tokens (light + dark, HSL-based):
 - **Neutrals** — `secondary`, `muted`, `accent`, `border`, `input`, `ring`
 - **Feedback** — `destructive`, `success`, `warning`, `info`
 
-Raw scale: `brand-{50…950}` (theme-independent indigo).
+All primitives live in `src/components/ui` and re-export from `@/components/ui`.
 
-Typography variables (assigned via `next/font`):
+---
 
-- `--font-sans` — Inter
-- `--font-display` — Plus Jakarta Sans
-- `--font-mono` — JetBrains Mono
+## Docker
 
-All primitives live in `src/components/ui` and re-export from
-`@/components/ui`.
+```bash
+# Build and start all services
+docker-compose up --build
 
-## Contributing (during learning)
+# Build the image directly
+docker build -t devflow-frontend .
 
-- Formatting and linting run automatically on commit via Husky +
-  lint-staged.
-- Prefer absolute imports from `@/…`.
-- Keep client-side interactivity behind `'use client'` — leave everything
-  else on the server by default.
+# Run the container
+docker run -p 3000:3000 \
+  -e NEXT_PUBLIC_API_URL=http://localhost:8000 \
+  devflow-frontend
+```
+
+The image uses `output: "standalone"` mode — only the files required to run the app are included, keeping the final image small.
+
+---
+
+## Testing
+
+```bash
+# Unit + component tests
+npm test
+
+# E2E (requires the app running on :3000)
+npx playwright install   # first time only
+npm run test:e2e
+```
+
+MSW intercepts all API calls in unit tests — no real backend needed.
+
+---
+
+## Code conventions
+
+- Absolute imports via `@/…`
+- Server components by default; `'use client'` only where interactivity is needed
+- Formatting and linting run automatically on commit via Husky + lint-staged
+
+---
 
 ## License
 
-Educational project. See the DevFlow learning documentation for context.
+MIT

@@ -1,6 +1,7 @@
 'use client';
 
 import { use, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { Plus } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -11,6 +12,8 @@ import {
   type TaskFilters,
 } from '@/components/tasks/task-filter-bar';
 import { CreateTaskModal } from '@/components/tasks/create-task-modal';
+import { listMembers } from '@/lib/api/organizations';
+import { useOrgStore, selectActiveOrgId } from '@/stores/org-store';
 
 interface PageProps {
   params: Promise<{ projectId: string }>;
@@ -28,11 +31,24 @@ export default function ProjectListPage({ params }: PageProps) {
     assigneeId: '',
   });
 
-  // TODO Phase 13: populate from org members
+  const activeOrgId = useOrgStore(selectActiveOrgId);
+
+  const { data: membersPage } = useQuery({
+    queryKey: ['org', activeOrgId, 'members'],
+    queryFn: () => listMembers(activeOrgId!, { pageSize: 100 }),
+    enabled: Boolean(activeOrgId),
+    staleTime: 5 * 60 * 1000,
+  });
+
   const assigneeMap: Record<
     string,
     { name: string; avatarUrl: string | null }
-  > = {};
+  > = Object.fromEntries(
+    (membersPage?.items ?? []).map((m) => [
+      m.userId,
+      { name: m.displayName, avatarUrl: m.avatarUrl },
+    ]),
+  );
 
   return (
     <div className="space-y-4">

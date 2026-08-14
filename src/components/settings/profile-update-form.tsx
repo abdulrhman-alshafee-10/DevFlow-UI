@@ -25,7 +25,7 @@ import {
 
 /**
  * Profile Settings form — lets the user update their display name.
- * Avatar upload is placeholder UI; fully implemented in Phase 15.
+ * Avatar upload is currently disabled (coming soon).
  */
 export function ProfileUpdateForm() {
   const { user } = useAuth();
@@ -81,7 +81,7 @@ export function ProfileUpdateForm() {
           <div className="space-y-1">
             <p className="text-sm font-medium">Profile photo</p>
             <p className="text-xs text-muted-foreground">
-              Avatar upload coming in Phase 15.
+              Avatar upload coming soon.
             </p>
             <Button
               type="button"

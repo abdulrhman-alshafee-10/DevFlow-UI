@@ -6,9 +6,8 @@ import type { User } from '@/types';
  * Auth state store.
  *
  * Tracks the currently authenticated user and the loading state of the
- * initial session check. The actual auth API calls (login, logout, etc.)
- * will live in `src/lib/api/auth.ts` (Phase 7) — this store is only the
- * reactive state container.
+ * initial session check. Auth API calls live in `src/lib/api/auth.ts`.
+ * This store is the reactive state container.
  */
 interface AuthState {
   /** Authenticated user, or `null` when logged out / not yet loaded. */

@@ -25,7 +25,7 @@ export function SiteHeader() {
             {siteConfig.name}
           </Link>
           <Badge variant="secondary" className="hidden sm:inline-flex">
-            Phase 1 · Foundation
+            v1.0
           </Badge>
         </div>
 
