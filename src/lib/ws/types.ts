@@ -46,6 +46,15 @@ export interface MemberLeftPayload {
   orgId: string;
 }
 
+export interface NotificationPayload {
+  /** The notification id so the client can append/invalidate precisely. */
+  notificationId: string;
+  /** Short human-readable message to show in a Toast. */
+  message: string;
+  /** Optional deep-link target. */
+  resourceUrl: string | null;
+}
+
 // ── Discriminated union ────────────────────────────────────────────────────
 
 export type WsEvent =
@@ -57,6 +66,7 @@ export type WsEvent =
   | { type: 'comment_deleted'; payload: CommentDeletedPayload }
   | { type: 'member_joined'; payload: MemberJoinedPayload }
   | { type: 'member_left'; payload: MemberLeftPayload }
+  | { type: 'notification'; payload: NotificationPayload }
   | { type: 'ping' };
 
 /** Parse a raw WebSocket message data string into a `WsEvent`. */

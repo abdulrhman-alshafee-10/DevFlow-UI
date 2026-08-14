@@ -12,6 +12,11 @@ export type { User, UserRole } from './user';
 export type { Organization } from './organization';
 export type { Project, ProjectStatus } from './project';
 export type { Task } from './task';
+export type {
+  Notification,
+  NotificationType,
+  NotificationsPage,
+} from './notification';
 
 /** A record with well-known ISO-8601 timestamp fields. */
 export interface Timestamps {

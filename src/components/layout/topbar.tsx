@@ -2,7 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { Menu, ChevronRight, Bell, LogOut } from 'lucide-react';
+import { Menu, ChevronRight, LogOut } from 'lucide-react';
 
 import { cn } from '@/lib/utils/cn';
 import { ThemeToggle } from '@/components/layout/theme-toggle';
@@ -18,6 +18,7 @@ import { buttonVariants } from '@/components/ui/button';
 import { dashboardNav } from '@/config/nav';
 import { useAuth } from '@/hooks/use-auth';
 import { ConnectionStatusDot } from '@/components/layout/connection-status-dot';
+import { NotificationBell } from '@/components/notifications/notification-bell';
 
 interface TopbarProps {
   onMenuClick: () => void;
@@ -97,13 +98,7 @@ export function Topbar({ onMenuClick }: TopbarProps) {
         {/* Realtime connection status dot */}
         <ConnectionStatusDot />
 
-        <button
-          type="button"
-          aria-label="Notifications"
-          className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }))}
-        >
-          <Bell className="size-4" aria-hidden="true" />
-        </button>
+        <NotificationBell />
 
         <ThemeToggle />
 

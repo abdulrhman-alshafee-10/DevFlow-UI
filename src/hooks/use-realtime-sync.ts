@@ -6,6 +6,8 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useWebSocket } from './use-websocket';
 import { useOrgStore } from '@/stores/org-store';
 import { env } from '@/config/env';
+import { toast } from '@/components/ui/toast';
+import { notificationKeys } from './use-notifications';
 import type { WsEvent } from '@/lib/ws/types';
 
 /**
@@ -64,6 +66,23 @@ export function useRealtimeSync() {
           queryClient.invalidateQueries({
             queryKey: ['organizations', event.payload.orgId, 'members'],
           });
+          break;
+
+        // ── Notification events ────────────────────────────────────────
+        case 'notification':
+          // Show a toast for the incoming notification
+          toast.info(event.payload.message, {
+            action: event.payload.resourceUrl
+              ? {
+                  label: 'View',
+                  onClick: () => {
+                    window.location.href = event.payload.resourceUrl!;
+                  },
+                }
+              : undefined,
+          });
+          // Invalidate both the list and the unread count so the bell updates
+          queryClient.invalidateQueries({ queryKey: notificationKeys.all });
           break;
 
         default:
