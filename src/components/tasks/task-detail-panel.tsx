@@ -3,11 +3,11 @@
 import { AlignLeft, History } from 'lucide-react';
 
 import { Spinner } from '@/components/ui/spinner';
-import { Badge } from '@/components/ui/badge';
 import { useTaskDetail } from '@/hooks/use-task-detail';
 import { InlineEditField } from './inline-edit-field';
 import { TaskMetaSidebar } from './task-meta-sidebar';
 import { TaskHistoryTimeline } from './task-history-timeline';
+import { CommentThread } from '@/components/comments/comment-thread';
 
 interface AssigneeInfo {
   name: string;
@@ -102,6 +102,11 @@ export function TaskDetailPanel({
             Activity
           </div>
           <TaskHistoryTimeline entries={history} isLoading={isLoadingHistory} />
+        </div>
+
+        {/* ── Comments ───────────────────────────────────────────────── */}
+        <div className="border-t border-border pt-5">
+          <CommentThread taskId={taskId} />
         </div>
       </div>
 
