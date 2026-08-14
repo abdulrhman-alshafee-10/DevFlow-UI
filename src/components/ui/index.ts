@@ -60,3 +60,5 @@ export type {
   ToastAPI,
   ToastVariant,
 } from './toast';
+
+export { Tabs, TabsList, TabsTrigger, TabsContent } from './tabs';
