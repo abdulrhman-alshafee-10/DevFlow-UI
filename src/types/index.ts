@@ -17,6 +17,7 @@ export type {
   NotificationType,
   NotificationsPage,
 } from './notification';
+export type { Attachment, UploadState, UploadStatus } from './attachment';
 
 /** A record with well-known ISO-8601 timestamp fields. */
 export interface Timestamps {

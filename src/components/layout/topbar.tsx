@@ -19,6 +19,7 @@ import { dashboardNav } from '@/config/nav';
 import { useAuth } from '@/hooks/use-auth';
 import { ConnectionStatusDot } from '@/components/layout/connection-status-dot';
 import { NotificationBell } from '@/components/notifications/notification-bell';
+import { CommandPalette } from '@/components/search/command-palette';
 
 interface TopbarProps {
   onMenuClick: () => void;
@@ -92,6 +93,9 @@ export function Topbar({ onMenuClick }: TopbarProps) {
           })}
         </ol>
       </nav>
+
+      {/* Command palette — visible on md+ */}
+      <CommandPalette />
 
       {/* Actions */}
       <div className="flex items-center gap-2">

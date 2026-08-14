@@ -6,3 +6,5 @@ export * as projectsApi from './projects';
 export * as tasksApi from './tasks';
 export * as commentsApi from './comments';
 export * as notificationsApi from './notifications';
+export * as attachmentsApi from './attachments';
+export * as searchApi from './search';

@@ -8,6 +8,7 @@ import { InlineEditField } from './inline-edit-field';
 import { TaskMetaSidebar } from './task-meta-sidebar';
 import { TaskHistoryTimeline } from './task-history-timeline';
 import { CommentThread } from '@/components/comments/comment-thread';
+import { FileUploadZone } from '@/components/files/file-upload-zone';
 
 interface AssigneeInfo {
   name: string;
@@ -102,6 +103,11 @@ export function TaskDetailPanel({
             Activity
           </div>
           <TaskHistoryTimeline entries={history} isLoading={isLoadingHistory} />
+        </div>
+
+        {/* ── Attachments ────────────────────────────────────────────── */}
+        <div className="border-t border-border pt-5">
+          <FileUploadZone taskId={taskId} />
         </div>
 
         {/* ── Comments ───────────────────────────────────────────────── */}
