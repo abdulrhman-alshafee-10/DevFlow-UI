@@ -1,5 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Produces a minimal self-contained build for Docker deployment.
+  // Only the files required to run the app are copied to `.next/standalone`.
+  output: 'standalone',
+
   reactStrictMode: true,
   poweredByHeader: false,
   images: {
