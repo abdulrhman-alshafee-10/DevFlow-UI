@@ -1,14 +1,76 @@
-import { LayoutGrid } from 'lucide-react';
+'use client';
+
+import { use, useState } from 'react';
+import { Plus } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
+import { PermissionGate } from '@/components/auth/permission-gate';
+import { TaskBoard } from '@/components/tasks/task-board';
+import {
+  TaskFilterBar,
+  type TaskFilters,
+} from '@/components/tasks/task-filter-bar';
+import { CreateTaskModal } from '@/components/tasks/create-task-modal';
+import type { Priority } from '@/types';
+
+interface PageProps {
+  params: Promise<{ projectId: string }>;
+}
 
 /**
- * Project Board page — placeholder until Phase 10 (Task Board).
- * The project header + nav tabs are rendered by the parent layout.
+ * Project Board page — Kanban view.
+ * Thin shell: state for filters + modal, delegates rendering to components.
  */
-export default function ProjectBoardPage() {
+export default function ProjectBoardPage({ params }: PageProps) {
+  const { projectId } = use(params);
+  const [createOpen, setCreateOpen] = useState(false);
+  const [filters, setFilters] = useState<TaskFilters>({
+    search: '',
+    priority: '',
+    assigneeId: '',
+  });
+
+  // TODO Phase 13: populate assigneeMap from org members query
+  const assigneeMap: Record<
+    string,
+    { name: string; avatarUrl: string | null }
+  > = {};
+
   return (
-    <div className="flex min-h-64 flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-border bg-card text-muted-foreground">
-      <LayoutGrid className="size-8 opacity-40" aria-hidden="true" />
-      <p className="text-sm">Task board coming in Phase 10.</p>
+    <div className="space-y-4">
+      {/* Toolbar */}
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <TaskFilterBar
+          filters={filters}
+          onChange={setFilters}
+          assignees={Object.entries(assigneeMap).map(([id, a]) => ({
+            id,
+            name: a.name,
+          }))}
+        />
+        <PermissionGate permission="task:create">
+          <Button onClick={() => setCreateOpen(true)} size="sm">
+            <Plus className="size-4" aria-hidden="true" />
+            Add task
+          </Button>
+        </PermissionGate>
+      </div>
+
+      <TaskBoard
+        projectId={projectId}
+        filters={{
+          search: filters.search || undefined,
+          priority: (filters.priority as Priority) || undefined,
+          assigneeId: filters.assigneeId || undefined,
+        }}
+        assigneeMap={assigneeMap}
+      />
+
+      <CreateTaskModal
+        projectId={projectId}
+        open={createOpen}
+        onClose={() => setCreateOpen(false)}
+      />
     </div>
   );
 }
