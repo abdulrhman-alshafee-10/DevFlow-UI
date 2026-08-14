@@ -11,6 +11,8 @@ import {
   type TaskFilters,
 } from '@/components/tasks/task-filter-bar';
 import { CreateTaskModal } from '@/components/tasks/create-task-modal';
+import { ProjectSummarizeButton } from '@/components/ai/project-summarize-button';
+import { AIAssistantPanel } from '@/components/ai/ai-assistant-panel';
 import type { Priority } from '@/types';
 
 interface PageProps {
@@ -48,12 +50,15 @@ export default function ProjectBoardPage({ params }: PageProps) {
             name: a.name,
           }))}
         />
-        <PermissionGate permission="task:create">
-          <Button onClick={() => setCreateOpen(true)} size="sm">
-            <Plus className="size-4" aria-hidden="true" />
-            Add task
-          </Button>
-        </PermissionGate>
+        <div className="flex items-center gap-2">
+          <ProjectSummarizeButton projectId={projectId} />
+          <PermissionGate permission="task:create">
+            <Button onClick={() => setCreateOpen(true)} size="sm">
+              <Plus className="size-4" aria-hidden="true" />
+              Add task
+            </Button>
+          </PermissionGate>
+        </div>
       </div>
 
       <TaskBoard
@@ -64,6 +69,11 @@ export default function ProjectBoardPage({ params }: PageProps) {
           assigneeId: filters.assigneeId || undefined,
         }}
         assigneeMap={assigneeMap}
+      />
+
+      {/* AI assistant — collapsible, scoped to this project */}
+      <AIAssistantPanel
+        context={{ type: 'project', id: projectId, label: 'This project' }}
       />
 
       <CreateTaskModal

@@ -4,11 +4,16 @@ import { AlignLeft, History } from 'lucide-react';
 
 import { Spinner } from '@/components/ui/spinner';
 import { useTaskDetail } from '@/hooks/use-task-detail';
+import { useTasks } from '@/hooks/use-tasks';
 import { InlineEditField } from './inline-edit-field';
 import { TaskMetaSidebar } from './task-meta-sidebar';
 import { TaskHistoryTimeline } from './task-history-timeline';
 import { CommentThread } from '@/components/comments/comment-thread';
 import { FileUploadZone } from '@/components/files/file-upload-zone';
+import { TaskAnalyzeButton } from '@/components/ai/task-analyze-button';
+import { SuggestSubtasksButton } from '@/components/ai/suggest-subtasks-button';
+import { AIAssistantPanel } from '@/components/ai/ai-assistant-panel';
+import type { Priority } from '@/types';
 
 interface AssigneeInfo {
   name: string;
@@ -39,6 +44,9 @@ export function TaskDetailPanel({
     updateTask,
     isUpdating,
   } = useTaskDetail(taskId);
+
+  // Used by SuggestSubtasksButton to create subtasks in the same project
+  const { createTaskAsync } = useTasks(task?.projectId ?? '');
 
   if (isLoading) {
     return (
@@ -96,8 +104,30 @@ export function TaskDetailPanel({
           />
         </div>
 
+        {/* ── AI tools ───────────────────────────────────────────────── */}
+        <div className="flex flex-wrap gap-3 border-t border-border pt-4">
+          <TaskAnalyzeButton taskId={taskId} />
+          <SuggestSubtasksButton
+            taskId={taskId}
+            projectId={task.projectId}
+            onCreateSubtask={({ title, description, priority }) =>
+              createTaskAsync({
+                title,
+                description,
+                priority: priority as Priority,
+                status: 'todo',
+              }).then(() => undefined)
+            }
+          />
+        </div>
+
+        {/* ── Ask AI ─────────────────────────────────────────────────── */}
+        <AIAssistantPanel
+          context={{ type: 'task', id: taskId, label: task.title }}
+        />
+
         {/* ── Activity / History ─────────────────────────────────────── */}
-        <div className="space-y-3 pt-2">
+        <div className="space-y-3 border-t border-border pt-4">
           <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
             <History className="size-3.5" aria-hidden="true" />
             Activity
