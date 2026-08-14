@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils/cn';
 import { dashboardNav } from '@/config/nav';
 import { siteConfig } from '@/config/site';
+import { OrgSwitcher } from '@/components/organizations/org-switcher';
 
 interface SidebarProps {
   /** Called when a nav link is clicked — used by MobileNav to close the drawer */
@@ -72,11 +73,9 @@ export function Sidebar({ onNavClick }: SidebarProps) {
         </ul>
       </nav>
 
-      {/* Footer slot — Phase 4+ will add user avatar here */}
+      {/* Footer — org switcher */}
       <div className="shrink-0 border-t border-border p-3">
-        <div className="rounded-md px-3 py-2 text-xs text-muted-foreground">
-          Phase 3 · App Router
-        </div>
+        <OrgSwitcher />
       </div>
     </aside>
   );

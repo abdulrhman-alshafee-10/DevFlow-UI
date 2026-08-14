@@ -22,6 +22,24 @@ export const apiClient = axios.create({
   headers: { 'Content-Type': 'application/json' },
 });
 
+// ── Request interceptor — inject active org header ────────────────────────
+
+/**
+ * Reads the active organization from the Zustand store on every request and
+ * injects `X-Organization-Id` so the backend can scope queries correctly.
+ * The import is lazy to avoid a circular dependency at module init time.
+ */
+apiClient.interceptors.request.use(async (config) => {
+  if (typeof window !== 'undefined') {
+    const { useOrgStore } = await import('@/stores/org-store');
+    const activeOrgId = useOrgStore.getState().activeOrg?.id;
+    if (activeOrgId) {
+      config.headers['X-Organization-Id'] = activeOrgId;
+    }
+  }
+  return config;
+});
+
 // ── Token refresh state ────────────────────────────────────────────────────
 
 /**

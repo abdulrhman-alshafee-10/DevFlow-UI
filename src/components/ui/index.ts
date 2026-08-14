@@ -62,3 +62,8 @@ export type {
 } from './toast';
 
 export { Tabs, TabsList, TabsTrigger, TabsContent } from './tabs';
+
+export { DataTable } from './data-table';
+export type { DataTableColumn, DataTableProps } from './data-table';
+
+export { Pagination } from './pagination';
